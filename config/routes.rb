@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :articles do
-    resources :comments, only: [ :create, :destroy, :update, :edit ]
+    resources :comments, only: [ :create, :destroy, :update, :edit ] do
+      get "reply", on: :member
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -49,6 +49,14 @@ class CommentsController < ApplicationController
     end
   end
 
+  def reply
+    @article = Article.find(params[:article_id])
+    @parent_comment = Comment.find(params[:id])
+    @comment = Comment.new(parent_id: @parent_comment.id)
+
+    render partial: "comments/form", locals: { article: @article, comment: @comment, form_class: "reply" }
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

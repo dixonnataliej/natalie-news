@@ -1,21 +1,47 @@
-<%= form_with(model: [article, comment || Comment.new], local: true, class: "comment-form #{form_class}") do |form| %>
-  <%= form.hidden_field :parent_id %>
-  <% if comment&.errors&.any? %>
-    <div class="form-errors">
-      <h2><%= pluralize(comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
-      <ul>
-        <% comment.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+<% if form_class == "reply" %>
+  <%= turbo_frame_tag "reply_form_for_comment_#{comment.parent_id}" do %>
+    <%= form_with(model: [article, comment || Comment.new], data: { turbo_frame: "_top" }, local: true, class: "comment-form #{form_class}") do |form| %>
+      <%= form.hidden_field :parent_id %>
+      <% if comment&.errors&.any? %>
+        <div class="form-errors">
+          <h2><%= pluralize(comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+          <ul>
+            <% comment.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="form-field">
+        <%= form.label :body, class: "form-label" %>
+        <%= form.text_area :body, class: "form-input", required: true %>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Add Reply", class: "button" %>
+      </div>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= form_with(model: [article, comment || Comment.new], local: true, class: "comment-form #{form_class}") do |form| %>
+    <%= form.hidden_field :parent_id %>
+    <% if comment&.errors&.any? %>
+      <div class="form-errors">
+        <h2><%= pluralize(comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+        <ul>
+          <% comment.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="form-field">
+      <%= form.label :body, class: "form-label" %>
+      <%= form.text_area :body, class: "form-input", required: true %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Add Comment", class: "button" %>
     </div>
   <% end %>
-  <div class="form-field">
-    <%= form.label :body, class: "form-label" %>
-    <%= form.text_area :body, class: "form-input", required: true %>
-  </div>
-
-  <div class="form-actions">
-    <%= form.submit "Add Comment", class: "button" %>
-  </div>
 <% end %>

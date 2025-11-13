@@ -104,10 +104,13 @@ RSpec.describe 'Comment Replies', type: :feature do
 
   it 'allows a user to reply to a comment' do
     visit article_path(article)
+    save_and_open_page
+    puts page.body
+    click_link 'Reply'
 
     within(".comment-form.reply") do
       fill_in 'Body', with: 'This is a reply'
-      click_button 'Add Comment'
+      click_button 'Add Reply'
     end
 
     expect(page).to have_content('This is a reply')

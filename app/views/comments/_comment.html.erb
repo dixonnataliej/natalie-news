@@ -9,9 +9,10 @@
     <% end %>
   <% end %>
   <% if user_signed_in? %>
-    <!-- Reply form -->
-    reply
-    <%= render 'comments/form', article: comment.article, comment: Comment.new(parent_id: comment.id), form_class: "reply" %>    <% end %>
+    <%= turbo_frame_tag "reply_form_for_comment_#{comment.id}" do %>
+      <%= link_to "Reply", reply_article_comment_path(comment.article, comment), class: "button" %>
+    <% end %>
+  <% end %>
 
   <% comment.replies.each do |reply| %>
     <div class="reply" style="margin-left: 30px;">
